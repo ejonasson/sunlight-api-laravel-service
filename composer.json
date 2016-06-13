@@ -1,0 +1,19 @@
+{
+  "name": "ejonasson/sunlight-api-laravel-service",
+  "description": "A Laravel 5 facade/Service Provider for the Sunlight Foundation API",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Erik Jonasson",
+      "email": "ejonasson@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "ejonasson\\SunlightAPI\\": "src/"
+    }
+  }
+}
