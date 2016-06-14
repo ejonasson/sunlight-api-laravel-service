@@ -2,6 +2,8 @@
 
 A Laravel 5 wrapper for the Sunlight Foundation API(http://sunlightfoundation.com/) using Guzzle and Curl. Includes caching support for minimizing API calls.
 
+*This integration has not yet been robustly used/tested in a live environment. Use at your own risk.*
+
 Configuration
 ------------
 
