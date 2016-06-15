@@ -20,5 +20,4 @@ return [
    * Set the duration of the cache for Sunlight API Requests
    */
   'cache_duration' => 60,
-
 ];

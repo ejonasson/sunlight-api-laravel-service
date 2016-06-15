@@ -24,7 +24,6 @@ abstract class APIRequest
         $this->api_key = config('sunlightapi.sunlight_api_key');
         $this->endpoint = $endpoint;
         $this->args = $this->setInitialArgs($args);
-        $this->request_type = $this->getRequestType();
     }
 
     abstract public function getUrl();
@@ -56,12 +55,6 @@ abstract class APIRequest
         return $this->response;
     }
 
-    public function getRequestType()
-    {
-        $request = explode('/', $this->endpoint);
-        return $request[0];
-    }
-
     public function request($args = array(), $use_cache = true)
     {
         if (empty($this->endpoint)) {
@@ -87,14 +80,19 @@ abstract class APIRequest
                 throw new SunlightAPIException('Valid JSON not retreived by API');
             }
         } catch (RequestException $e) {
-            dd($e);
+            throw new SunlightAPIException($e->getMessage());
         }
     }
 
-    public function setParam(array $params)
+    public function addParams(array $params)
     {
         $this->args = array_merge($params, $this->args);
         return $this;
+    }
+
+    public function getParams()
+    {
+        return $this->args;
     }
 
     public function setEndpoint($endpoint)
@@ -103,9 +101,14 @@ abstract class APIRequest
         return $this;
     }
 
+    /**
+     * Reset Parameters to the default Argusments
+     * @return $this
+     */
     public function resetParams()
     {
         $this->args = [];
+        $this->args = $this->setInitialArgs($this->args);
         return $this;
     }
 
@@ -133,7 +136,7 @@ abstract class APIRequest
      * Override this function in the parent if there are additional default args
      * @param array $args
      */
-    public function setInitialArgs($args)
+    protected function setInitialArgs($args)
     {
         return $args;
     }
@@ -141,19 +144,19 @@ abstract class APIRequest
     /* --------------------------------------------------------------------
         Caching Functionality for API Responses
     ------------------------------------------------------------------------------*/
-    public function checkCache()
+    protected function checkCache()
     {
         $cache_name = $this->getCacheName();
         return Cache::has($cache_name);
     }
 
-    public function getCachedResult()
+    protected function getCachedResult()
     {
         $cache_name = $this->getCacheName();
         return Cache::get($cache_name);
     }
 
-    public function cacheResponse()
+    protected function cacheResponse()
     {
         $cache_name = $this->getCacheName();
         $cache_duration = config('sunlightapi.cache_duration', 60);
@@ -165,7 +168,7 @@ abstract class APIRequest
         return $this->response;
     }
 
-    public function getCacheName()
+    protected function getCacheName()
     {
         // Generate a MD5 hash as a cache name
         // This hash combines a serialization of the $args array, along with the endpoint name

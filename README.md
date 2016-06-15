@@ -73,12 +73,12 @@ The second parameter of the `SunlightAPI::makeRequest()` function sets your API 
 
 The third parameter of the `SunlightAPI::makeRequest()` function sets your API Parameters. Pass these into the function as an array.
 
-You can also add these parameters using the `setParam()` method on the API Request Class. So the example above can also be executed using the following code:
+You can also add these parameters using the `addParams()` method on the API Request Class. So the example above can also be executed using the following code:
 
 ```php
 $request = \SunlightAPI::makeRequest('congress');
 $request->setEndpoint('legislators');
-$request->setParam(['party' => 'D']);
+$request->addParams(['party' => 'D']);
 $legislators = $request->get();
 ```
 
